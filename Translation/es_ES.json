@@ -15,5 +15,18 @@
     "sorteo-importe-donativo-negative": "El importe donativo no puede ser negativo.",
     "invalid-descripcion": "La descripción del sorteo es obligatoria.",
     "invalid-importe_jugado": "El importe jugado no puede ser negativo.",
-    "invalid-importe_donativo": "El importe donativo no puede ser negativo."
+    "invalid-importe_donativo": "El importe donativo no puede ser negativo.",
+    "talonarios": "Talonarios",
+    "talonario": "Talonario",
+    "nro_inicio": "Número inicio",
+    "nro_fin": "Número fin",
+    "idcontacto": "Contacto",
+    "vendidas": "Participaciones vendidas",
+    "no_vendidas": "Participaciones no vendidas",
+    "total_participaciones": "Total participaciones",
+    "precio_talonario": "Precio talonario",
+    "invalid-range-numbers": "El rango de números es inválido (nro_fin debe ser >= nro_inicio).",
+    "invalid-vendidas": "El número de participaciones vendidas es inválido.",
+    "invalid-no_vendidas": "El número de participaciones no vendidas es inválido.",
+    "invalid-sum-vendidas-no_vendidas": "La suma de vendidas y no vendidas debe ser igual al total de participaciones."
 }

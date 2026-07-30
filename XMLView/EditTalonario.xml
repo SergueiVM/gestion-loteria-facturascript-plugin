@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="idtalonario" />
+        </column>
+
+        <column name="sorteo" order="110">
+            <widget type="select" fieldname="idsorteo" onclick="EditSorteo" required="true">
+                <values source="Sorteo" fieldcode="idsorteo" fieldtitle="descripcion" />
+            </widget>
+        </column>
+
+        <column name="nro_inicio" order="120">
+            <widget type="number" fieldname="nro_inicio" decimal="0" />
+        </column>
+
+        <column name="nro_fin" order="130">
+            <widget type="number" fieldname="nro_fin" decimal="0" />
+        </column>
+
+        <column name="contacto" order="140">
+            <widget type="autocomplete" fieldname="idcontacto" onclick="EditContacto">
+                <values source="Contacto" fieldcode="idcontacto" />
+            </widget>
+        </column>
+
+        <column name="vendidas" order="150">
+            <widget type="number" fieldname="vendidas" decimal="0" />
+        </column>
+
+        <column name="no_vendidas" order="160">
+            <widget type="number" fieldname="no_vendidas" decimal="0" />
+        </column>
+
+        <column name="total-participaciones" display="right" order="170">
+            <widget type="number" fieldname="total_participaciones" decimal="0" readonly="true" />
+        </column>
+
+        <column name="precio-talonario" display="right" order="180">
+            <widget type="money" fieldname="precio_talonario" readonly="true" />
+        </column>
+    </columns>
+</view>

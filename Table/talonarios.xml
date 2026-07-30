@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : talonarios.xml
+    Description: Structure for the talonarios table used by GestionLoteria plugin.
+-->
+<table>
+    <column>
+        <name>idsorteo</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>nro_inicio</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>nro_fin</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idcontacto</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>vendidas</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>no_vendidas</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>total_participaciones</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>precio_talonario</name>
+        <type>numeric(14,2)</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>idtalonario</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+
+    <constraint>
+        <name>talonarios_pkey</name>
+        <type>PRIMARY KEY (idtalonario)</type>
+    </constraint>
+</table>

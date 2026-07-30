@@ -27,6 +27,10 @@ final class Init extends InitClass
         // Ensure table structure from Table/sorteos.xml is applied
         $this->updateTableData('sorteos');
 
+        // Ensure talonarios table and model are available
+        new Model\Talonario();
+        $this->updateTableData('talonarios');
+
         // If an old 'codigo' column still exists in DB, remove it to avoid NOT NULL errors
         try {
             $db = new DataBase();
