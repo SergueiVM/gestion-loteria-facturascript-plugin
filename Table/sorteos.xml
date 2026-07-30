@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : sorteos.xml
+    Author     : generated
+    Description: Structure for the sorteos table used by GestionLoteria plugin.
+-->
+<table>
+    <column>
+        <name>descripcion</name>
+        <type>character varying(255)</type>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>activo</name>
+        <type>boolean</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>importe_jugado</name>
+        <type>numeric(14,2)</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>importe_donativo</name>
+        <type>numeric(14,2)</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>importe_premio</name>
+        <type>numeric(14,2)</type>
+    </column>
+    <column>
+        <name>precio_participacion</name>
+        <type>numeric(14,2)</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>idsorteo</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+
+    <constraint>
+        <name>sorteos_pkey</name>
+        <type>PRIMARY KEY (idsorteo)</type>
+    </constraint>
+    <!-- 'codigo' removed: use idsorteo as primary code -->
+</table>

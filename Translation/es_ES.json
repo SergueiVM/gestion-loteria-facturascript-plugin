@@ -1,0 +1,19 @@
+{
+    "loteria": "Lotería",
+    "sorteos": "Sorteos",
+    "sorteo": "Sorteo",
+    "codigo": "ID",
+    "descripcion": "Descripción",
+    "fecha": "Fecha",
+    "activo": "Activo",
+    "importe-jugado": "Importe jugado",
+    "importe-donativo": "Importe donativo",
+    "importe-premio": "Importe premio participación",
+    "precio-participacion": "Precio participación",
+    "sorteo-descripcion-required": "La descripción del sorteo es obligatoria.",
+    "sorteo-importe-jugado-negative": "El importe jugado no puede ser negativo.",
+    "sorteo-importe-donativo-negative": "El importe donativo no puede ser negativo.",
+    "invalid-descripcion": "La descripción del sorteo es obligatoria.",
+    "invalid-importe_jugado": "El importe jugado no puede ser negativo.",
+    "invalid-importe_donativo": "El importe donativo no puede ser negativo."
+}

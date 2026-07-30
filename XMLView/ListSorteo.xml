@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="idsorteo"/>
+        </column>
+        <column name="descripcion" order="110">
+            <widget type="text" fieldname="descripcion"/>
+        </column>
+        <column name="fecha" display="right" order="130">
+            <widget type="date" fieldname="fecha"/>
+        </column>
+        <column name="activo" display="center" order="140">
+            <widget type="checkbox" fieldname="activo"/>
+        </column>
+        <column name="importe-jugado" display="right" order="150">
+            <widget type="money" fieldname="importe_jugado" totals="false"/>
+        </column>
+        <column name="importe-donativo" display="right" order="160">
+            <widget type="money" fieldname="importe_donativo" totals="false"/>
+        </column>
+        <column name="importe-premio" display="right" order="170">
+            <widget type="money" fieldname="importe_premio" totals="false"/>
+        </column>
+        <column name="precio-participacion" display="right" order="180">
+            <widget type="money" fieldname="precio_participacion" totals="false"/>
+        </column>
+    </columns>
+</view>

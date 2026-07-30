@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="main" numcolumns="12" valign="bottom">
+            <!-- First line: descripcion (single-line), fecha, activo -->
+            <column name="descripcion" order="100" numcolumns="6">
+                <widget type="text" fieldname="descripcion"/>
+            </column>
+            <column name="fecha" display="right" order="110" numcolumns="3">
+                <widget type="date" fieldname="fecha"/>
+            </column>
+            <column name="activo" display="center" order="120" numcolumns="3">
+                <widget type="checkbox" fieldname="activo"/>
+            </column>
+        </group>
+
+        <group name="importes" numcolumns="12">
+            <!-- Second line: importes -->
+            <column name="importe-jugado" order="200" numcolumns="3">
+                <widget type="money" fieldname="importe_jugado"/>
+            </column>
+            <column name="importe-donativo" order="210" numcolumns="3">
+                <widget type="money" fieldname="importe_donativo"/>
+            </column>
+            <column name="importe-premio" order="220" numcolumns="3">
+                <widget type="money" fieldname="importe_premio"/>
+            </column>
+            <column name="precio-participacion" display="right" order="230" numcolumns="3">
+                <widget type="money" fieldname="precio_participacion" readonly="true"/>
+            </column>
+        </group>
+    </columns>
+</view>
