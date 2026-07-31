@@ -18,6 +18,9 @@ class Sorteo extends ModelClass
     public $importe_donativo;
     public $importe_premio;
     public $precio_participacion;
+    public $codsubcuentaven_loteria;
+    public $codsubcuentadon_loteria;
+    public $codpago;
 
     public function clear(): void
     {
@@ -27,6 +30,9 @@ class Sorteo extends ModelClass
         $this->importe_jugado = 0.00;
         $this->importe_donativo = 0.00;
         $this->importe_premio = null;
+        $this->codsubcuentaven_loteria = null;
+        $this->codsubcuentadon_loteria = null;
+        $this->codpago = null;
     }
 
     public static function primaryColumn(): string
@@ -106,6 +112,11 @@ class Sorteo extends ModelClass
     {
         // sanitize
         $this->descripcion = Tools::noHtml(trim((string)$this->descripcion));
+
+        // optional accounting/payment fields: sanitize strings
+        $this->codsubcuentaven_loteria = isset($this->codsubcuentaven_loteria) ? trim((string)$this->codsubcuentaven_loteria) : null;
+        $this->codsubcuentadon_loteria = isset($this->codsubcuentadon_loteria) ? trim((string)$this->codsubcuentadon_loteria) : null;
+        $this->codpago = isset($this->codpago) ? trim((string)$this->codpago) : null;
 
         // validations
         if (empty($this->descripcion)) {

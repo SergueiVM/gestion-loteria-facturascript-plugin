@@ -40,5 +40,9 @@
         <column name="precio-talonario" display="right" order="180">
             <widget type="money" fieldname="precio_talonario" readonly="true" />
         </column>
+
+        <column name="pagado" order="190">
+            <widget type="checkbox" fieldname="pagado" />
+        </column>
     </columns>
 </view>

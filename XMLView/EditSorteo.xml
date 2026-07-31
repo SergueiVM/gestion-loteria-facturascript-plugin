@@ -29,5 +29,18 @@
                 <widget type="money" fieldname="precio_participacion" readonly="true"/>
             </column>
         </group>
+        <group name="contabilidad" title="accounting" numcolumns="12">
+            <column name="cuenta-venta-loteria" titleurl="ListCuenta" description="optional" numcolumns="4" order="300">
+                <widget type="subcuenta" fieldname="codsubcuentaven_loteria" />
+            </column>
+            <column name="cuenta-donativo-loteria" titleurl="ListCuenta" description="optional" numcolumns="4" order="310">
+                <widget type="subcuenta" fieldname="codsubcuentadon_loteria" />
+            </column>
+            <column name="payment-method" titleurl="ListFormaPago" numcolumns="4" order="320">
+                <widget type="select" fieldname="codpago" parent="idempresa" onclick="EditFormaPago">
+                    <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion" fieldfilter="idempresa" />
+                </widget>
+            </column>
+        </group>
     </columns>
 </view>

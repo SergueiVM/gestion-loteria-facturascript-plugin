@@ -31,18 +31,18 @@ final class Init extends InitClass
         new Model\Talonario();
         $this->updateTableData('talonarios');
 
-        // If an old 'codigo' column still exists in DB, remove it to avoid NOT NULL errors
-        try {
-            $db = new DataBase();
-            $db->connect();
-            $cols = $db->getColumns('sorteos');
-            if (array_key_exists('codigo', $cols)) {
-                $sql = 'ALTER TABLE sorteos DROP COLUMN codigo';
-                $db->exec($sql);
-                Tools::log()->info('Removed legacy column codigo from table sorteos');
-            }
-        } catch (\Throwable $e) {
-            Tools::log()->warning('Could not remove legacy column codigo: ' . $e->getMessage());
-        }
+    //     // If an old 'codigo' column still exists in DB, remove it to avoid NOT NULL errors
+    //     try {
+    //         $db = new DataBase();
+    //         $db->connect();
+    //         $cols = $db->getColumns('sorteos');
+    //         if (array_key_exists('codigo', $cols)) {
+    //             $sql = 'ALTER TABLE sorteos DROP COLUMN codigo';
+    //             $db->exec($sql);
+    //             Tools::log()->info('Removed legacy column codigo from table sorteos');
+    //         }
+    //     } catch (\Throwable $e) {
+    //         Tools::log()->warning('Could not remove legacy column codigo: ' . $e->getMessage());
+    //     }
     }
 }

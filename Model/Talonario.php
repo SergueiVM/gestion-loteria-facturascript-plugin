@@ -5,6 +5,7 @@ namespace FacturaScripts\Plugins\GestionLoteria\Model;
 use FacturaScripts\Core\Template\ModelClass;
 use FacturaScripts\Core\Template\ModelTrait;
 use FacturaScripts\Core\Tools;
+use FacturaScripts\Plugins\GestionLoteria\Lib\AsientoTalonario;
 
 class Talonario extends ModelClass
 {
@@ -19,6 +20,7 @@ class Talonario extends ModelClass
     public $no_vendidas;
     public $total_participaciones;
     public $precio_talonario;
+    public $pagado;
 
     public function clear(): void
     {
@@ -29,6 +31,7 @@ class Talonario extends ModelClass
         $this->no_vendidas = 0;
         $this->total_participaciones = 0;
         $this->precio_talonario = 0.00;
+        $this->pagado = false;
     }
 
     public static function primaryColumn(): string
@@ -171,6 +174,9 @@ class Talonario extends ModelClass
             return false;
         }
 
+        // Normalize pagado to boolean
+        $this->pagado = isset($this->pagado) ? (bool)$this->pagado : false;
+
         return parent::test();
     }
 
@@ -192,7 +198,39 @@ class Talonario extends ModelClass
         // Ensure values are stored (use parent::__set to avoid dynamic props issues)
         parent::__set('total_participaciones', $this->total_participaciones);
         parent::__set('precio_talonario', $this->precio_talonario);
+        // Ensure pagado is persisted and defaults to false
+        $this->pagado = isset($this->pagado) ? (bool)$this->pagado : false;
+        parent::__set('pagado', $this->pagado);
 
-        return parent::save();
+        // If pagado is being set now, validate that we can create the asiento
+        $prevPagado = $this->getOriginal('pagado') ? true : false;
+        if (!$prevPagado && $this->pagado) {
+            $valid = AsientoTalonario::validar($this);
+            if ($valid === false) {
+                return false;
+            }
+        }
+
+        // If unmarking pagado, ensure asiento can be deleted (not blocked)
+        if ($prevPagado && !$this->pagado) {
+            if (!AsientoTalonario::puedeEliminar($this)) {
+                Tools::log()->warning('talonario-asiento-locked');
+                return false;
+            }
+        }
+
+        $saved = parent::save();
+
+        // After saving, if pagado changed false->true, create the asiento
+        if ($saved && !$prevPagado && $this->pagado) {
+            AsientoTalonario::crear($this);
+        }
+
+        // After saving, if pagado changed true->false, delete the asiento(s)
+        if ($saved && $prevPagado && !$this->pagado) {
+            AsientoTalonario::eliminarByTalonarioId($this->idtalonario);
+        }
+
+        return $saved;
     }
 }
