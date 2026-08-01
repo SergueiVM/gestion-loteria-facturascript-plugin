@@ -31,6 +31,13 @@ final class Init extends InitClass
         new Model\Talonario();
         $this->updateTableData('talonarios');
 
+        // Ensure premios tables and models are available
+        new Model\PremioLote();
+        $this->updateTableData('premio_lotes');
+
+        new Model\PremioParticipacion();
+        $this->updateTableData('premio_participaciones');
+
     //     // If an old 'codigo' column still exists in DB, remove it to avoid NOT NULL errors
     //     try {
     //         $db = new DataBase();
