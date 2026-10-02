@@ -13,6 +13,9 @@
         <column name="activo" display="center" order="140">
             <widget type="checkbox" fieldname="activo"/>
         </column>
+        <column name="fecha-limite-pago" display="right" order="145">
+            <widget type="date" fieldname="fecha_limite_pago"/>
+        </column>
         <column name="importe-jugado" display="right" order="150">
             <widget type="money" fieldname="importe_jugado" totals="false"/>
         </column>

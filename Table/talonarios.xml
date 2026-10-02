@@ -46,6 +46,11 @@
         <default>false</default>
     </column>
     <column>
+        <name>matriz_entregada</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
         <name>idtalonario</name>
         <type>serial</type>
         <null>NO</null>

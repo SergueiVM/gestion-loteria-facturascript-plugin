@@ -14,6 +14,10 @@
         <type>date</type>
     </column>
     <column>
+        <name>fecha_limite_pago</name>
+        <type>date</type>
+    </column>
+    <column>
         <name>activo</name>
         <type>boolean</type>
         <default>true</default>

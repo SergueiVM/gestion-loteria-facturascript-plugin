@@ -54,6 +54,15 @@ class ListTalonario extends ListController
             'color' => 'success'
         ]);
 
+        $this->addButton('ListTalonario', [
+            'action' => "listViewSetAction('ListTalonario','mark-matrix-delivered'); return false;",
+            'type' => 'js',
+            'icon' => 'fa-solid fa-file-circle-check',
+            'label' => '',
+            'title' => 'mark-matrix-delivered',
+            'color' => 'primary'
+        ]);
+
         // Default to 'active' on first load
         if (isset($this->listView('ListTalonario')->filters['sorteo_estado'])) {
             $this->listView('ListTalonario')->filters['sorteo_estado']->setValue(2);
@@ -75,6 +84,28 @@ class ListTalonario extends ListController
         }
 
         parent::loadData($viewName, $view);
+
+        if ($viewName !== 'ListTalonario') {
+            return;
+        }
+
+        $statusRow = $view->getRow('status');
+        if ($statusRow !== null) {
+            $statusRow->options = [];
+        }
+
+        $today = date('Y-m-d');
+        foreach ($view->cursor as $talonario) {
+            if ($talonario->pagado) {
+                $this->addColor($viewName, 'idtalonario', $talonario->idtalonario, 'success');
+            } elseif (!empty($talonario->fecha_limite_pago)) {
+                if ($talonario->fecha_limite_pago < $today) {
+                    $this->addColor($viewName, 'idtalonario', $talonario->idtalonario, 'danger');
+                } elseif ($talonario->fecha_limite_pago === $today) {
+                    $this->addColor($viewName, 'idtalonario', $talonario->idtalonario, 'warning');
+                }
+            }
+        }
     }
 
     protected function execPreviousAction($action)
@@ -82,6 +113,9 @@ class ListTalonario extends ListController
         switch ($action) {
             case 'mark-paid':
                 $this->markPaidAction();
+                return true;
+            case 'mark-matrix-delivered':
+                $this->markMatrixDeliveredAction();
                 return true;
         }
 
@@ -148,6 +182,52 @@ class ListTalonario extends ListController
             }
 
             $tal->pagado = true;
+            if ($tal->save()) {
+                $success++;
+            } else {
+                $fail++;
+            }
+        }
+
+        if ($success > 0) {
+            Tools::log()->notice('records-updated-correctly', ['%count%' => $success]);
+        }
+        if ($fail > 0) {
+            Tools::log()->warning('records-updated-error', ['%count%' => $fail]);
+        }
+
+        return true;
+    }
+
+    private function markMatrixDeliveredAction(): bool
+    {
+        if (false === $this->permissions->allowUpdate) {
+            Tools::log()->warning('not-allowed-modify');
+            return true;
+        } elseif (false === $this->validateFormToken()) {
+            return true;
+        }
+
+        $selectedCodes = $this->getSelectedCodesFromRequest();
+        if (empty($selectedCodes)) {
+            Tools::log()->warning('no-record-selected');
+            return true;
+        }
+
+        $success = 0;
+        $fail = 0;
+        foreach ($selectedCodes as $code) {
+            $tal = new \FacturaScripts\Plugins\GestionLoteria\Model\Talonario();
+            if (false === $tal->load($code)) {
+                $fail++;
+                continue;
+            }
+
+            if ($tal->matriz_entregada) {
+                continue;
+            }
+
+            $tal->matriz_entregada = true;
             if ($tal->save()) {
                 $success++;
             } else {

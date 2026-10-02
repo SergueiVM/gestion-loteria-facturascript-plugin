@@ -44,5 +44,9 @@
         <column name="pagado" order="190">
             <widget type="checkbox" fieldname="pagado" />
         </column>
+
+        <column name="matriz-entregada" order="200">
+            <widget type="checkbox" fieldname="matriz_entregada" />
+        </column>
     </columns>
 </view>

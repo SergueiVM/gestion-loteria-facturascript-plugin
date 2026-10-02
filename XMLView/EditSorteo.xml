@@ -12,6 +12,9 @@
             <column name="activo" display="center" order="120" numcolumns="3">
                 <widget type="checkbox" fieldname="activo"/>
             </column>
+            <column name="fecha-limite-pago" display="right" order="130" numcolumns="3">
+                <widget type="date" fieldname="fecha_limite_pago"/>
+            </column>
         </group>
 
         <group name="importes" numcolumns="12">

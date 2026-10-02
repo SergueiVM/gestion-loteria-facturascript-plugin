@@ -13,6 +13,7 @@ class Sorteo extends ModelClass
     public $idsorteo;
     public $descripcion;
     public $fecha;
+    public $fecha_limite_pago;
     public $activo;
     public $importe_jugado;
     public $importe_donativo;
@@ -26,6 +27,7 @@ class Sorteo extends ModelClass
     {
         parent::clear();
         $this->fecha = Tools::date();
+        $this->fecha_limite_pago = null;
         $this->activo = true;
         $this->importe_jugado = 0.00;
         $this->importe_donativo = 0.00;

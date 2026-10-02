@@ -21,6 +21,7 @@ class Talonario extends ModelClass
     public $total_participaciones;
     public $precio_talonario;
     public $pagado;
+    public $matriz_entregada;
 
     public function clear(): void
     {
@@ -32,6 +33,7 @@ class Talonario extends ModelClass
         $this->total_participaciones = 0;
         $this->precio_talonario = 0.00;
         $this->pagado = false;
+        $this->matriz_entregada = false;
     }
 
     public static function primaryColumn(): string
@@ -176,6 +178,7 @@ class Talonario extends ModelClass
 
         // Normalize pagado to boolean
         $this->pagado = isset($this->pagado) ? (bool)$this->pagado : false;
+        $this->matriz_entregada = isset($this->matriz_entregada) ? (bool)$this->matriz_entregada : false;
 
         return parent::test();
     }
@@ -201,6 +204,8 @@ class Talonario extends ModelClass
         // Ensure pagado is persisted and defaults to false
         $this->pagado = isset($this->pagado) ? (bool)$this->pagado : false;
         parent::__set('pagado', $this->pagado);
+        $this->matriz_entregada = isset($this->matriz_entregada) ? (bool)$this->matriz_entregada : false;
+        parent::__set('matriz_entregada', $this->matriz_entregada);
 
         // If pagado is being set now, validate that we can create the asiento
         $prevPagado = $this->getOriginal('pagado') ? true : false;

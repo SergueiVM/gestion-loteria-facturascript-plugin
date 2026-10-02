@@ -24,8 +24,10 @@ class Talonario extends JoinModel
             'total_participaciones' => 'talonarios.total_participaciones',
             'precio_talonario' => 'talonarios.precio_talonario',
             'pagado' => 'talonarios.pagado',
+            'matriz_entregada' => 'talonarios.matriz_entregada',
             'contacto_descripcion' => 'contactos.descripcion',
-            'sorteo_descripcion' => 'sorteos.descripcion'
+            'sorteo_descripcion' => 'sorteos.descripcion',
+            'fecha_limite_pago' => 'sorteos.fecha_limite_pago'
         ];
     }
 
