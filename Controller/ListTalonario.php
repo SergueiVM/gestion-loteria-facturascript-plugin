@@ -20,7 +20,12 @@ class ListTalonario extends ListController
     protected function createViews()
     {
         $this->addView('ListTalonario', 'Join\\Talonario', 'talonarios', 'fa-solid fa-book')
-            ->addSearchFields(['idtalonario'])
+            ->addSearchFields([
+                'idtalonario',
+                'contactos.descripcion',
+                'CAST(talonarios.nro_inicio AS CHAR(50))',
+                'CAST(talonarios.nro_fin AS CHAR(50))',
+            ])
             ->addOrderBy(['idtalonario'], 'number', 1)
             // order option uses join model field 'contacto_descripcion'
             ->addOrderBy(['contacto_descripcion'], 'contact');
@@ -42,7 +47,7 @@ class ListTalonario extends ListController
         ]);
 
         // Add contact autocomplete filter
-        $this->addFilterAutocomplete('ListTalonario', 'idcontacto', 'contact', 'idcontacto', 'contactos', 'idcontacto', 'descripcion');
+        $this->addFilterAutocomplete('ListTalonario', 'idcontacto', 'contact', 'talonarios.idcontacto', 'contactos', 'idcontacto', 'descripcion');
 
         // action button: mark paid for selected talonarios (single icon button)
         $this->addButton('ListTalonario', [
