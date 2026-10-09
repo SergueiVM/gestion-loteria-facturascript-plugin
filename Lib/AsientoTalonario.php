@@ -120,7 +120,7 @@ class AsientoTalonario
         }
 
         $importe_venta = (float)$sorteo->importe_jugado * (int)$talonario->vendidas;
-        $importe_don = (float)$sorteo->importe_donativo * (int)$talonario->total_participaciones;
+        $importe_don = (float)$sorteo->importe_donativo * (int)$talonario->no_vendidas;
 
         // Ejercicio
         $ejercicio = new Ejercicio();

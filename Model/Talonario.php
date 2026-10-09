@@ -55,9 +55,15 @@ class Talonario extends ModelClass
     {
         $inicio = (int)($this->nro_inicio ?? 0);
         $fin = (int)($this->nro_fin ?? 0);
+
+        if ($inicio === 0 && $fin === 0) {
+            return 0;
+        }
+
         if ($fin < $inicio) {
             return 0;
         }
+
         return $fin - $inicio + 1;
     }
 
@@ -70,6 +76,7 @@ class Talonario extends ModelClass
     protected function ensureDefaults(): void
     {
         $total = $this->totalParticipaciones();
+        $normalizedNewRecord = false;
 
         $hasVendidas = isset($this->vendidas) && $this->vendidas !== null;
         $hasNoVendidas = isset($this->no_vendidas) && $this->no_vendidas !== null;
@@ -172,8 +179,18 @@ class Talonario extends ModelClass
         }
 
         if ($this->vendidas !== null && ($this->vendidas + $this->no_vendidas) !== $total) {
-            Tools::log()->error('invalid-sum-vendidas-no_vendidas');
-            return false;
+            if (empty($this->idtalonario) && $total > 0) {
+                $this->vendidas = max(0, $total - (int)$this->no_vendidas);
+                $this->no_vendidas = max(0, $total - (int)$this->vendidas);
+                if (($this->vendidas + $this->no_vendidas) === $total) {
+                    $normalizedNewRecord = true;
+                }
+            }
+
+            if (false === $normalizedNewRecord) {
+                Tools::log()->error('invalid-sum-vendidas-no_vendidas');
+                return false;
+            }
         }
 
         // Normalize pagado to boolean
@@ -185,10 +202,20 @@ class Talonario extends ModelClass
 
     public function save(): bool
     {
+        $total = $this->totalParticipaciones();
+
         // If both counters are explicitly zero, treat as not-provided: default vendidas=total
-        if (((int)($this->vendidas ?? 0)) === 0 && ((int)($this->no_vendidas ?? 0)) === 0) {
+        if (((int)($this->vendidas ?? 0)) === 0 && ((int)($this->no_vendidas ?? 0)) === 0 && $total > 0) {
             $this->vendidas = $this->totalParticipaciones();
             $this->no_vendidas = 0;
+        }
+
+        // For a new record, always normalize counters to the current total before storing price.
+        if (empty($this->idtalonario) && $total > 0) {
+            if (((int)($this->vendidas ?? 0)) + ((int)($this->no_vendidas ?? 0)) !== $total) {
+                $this->vendidas = $total;
+                $this->no_vendidas = 0;
+            }
         }
 
         // Ensure vendidas/no_vendidas defaults so totals and price are consistent

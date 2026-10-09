@@ -245,7 +245,8 @@ class EditPremioLote extends Controller
             . ' WHERE idsorteo = ' . $idsorteo
             . ' AND pagado = ' . $this->dataBase->var2str(true)
             . ' AND nro_inicio <= ' . $numero
-            . ' AND nro_fin >= ' . $numero;
+            . ' AND nro_fin >= ' . $numero
+            . ' ORDER BY idtalonario DESC';
 
         return $this->dataBase->select($sql);
     }
@@ -351,9 +352,10 @@ class EditPremioLote extends Controller
             }
 
             if (count($talonarios) > 1) {
-                Tools::log()->warning('papeleta-in-several-booklets', ['%numero%' => $numero]);
-                $rejected[] = $token;
-                continue;
+                Tools::log()->warning('papeleta-in-several-booklets', [
+                    '%numero%' => $numero,
+                    '%talonario%' => (int)$talonarios[0]['idtalonario'],
+                ]);
             }
 
             $valid[] = ['numero' => $numero, 'idtalonario' => (int)$talonarios[0]['idtalonario']];
