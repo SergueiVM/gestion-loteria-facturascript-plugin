@@ -94,6 +94,10 @@ class ListTalonario extends ListController
             return;
         }
 
+        if (empty($this->request->request->get('loadfilter')) && $this->hasOnlyDefaultTalonarioFilter($view)) {
+            $view->showFilters = false;
+        }
+
         $statusRow = $view->getRow('status');
         if ($statusRow !== null) {
             $statusRow->options = [];
@@ -111,6 +115,27 @@ class ListTalonario extends ListController
                 }
             }
         }
+    }
+
+    /**
+     * Returns true when the only active filter is the default "active" status.
+     */
+    private function hasOnlyDefaultTalonarioFilter($view): bool
+    {
+        foreach ($view->filters as $key => $filter) {
+            $value = $filter->getValue();
+            if ($value === null || $value === '' || $value === 0 || $value === '0') {
+                continue;
+            }
+
+            if ($key === 'sorteo_estado' && (string)$value === '2') {
+                continue;
+            }
+
+            return false;
+        }
+
+        return isset($view->filters['sorteo_estado']);
     }
 
     protected function execPreviousAction($action)
