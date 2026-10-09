@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="participation-number" order="100">
+            <widget type="number" fieldname="numero" decimal="0"/>
+        </column>
+        <column name="sorteo" order="110">
+            <widget type="select" fieldname="idsorteo" onclick="EditSorteo">
+                <values source="sorteos" fieldcode="idsorteo" fieldtitle="descripcion"/>
+            </widget>
+        </column>
+        <column name="talonario" order="120">
+            <widget type="text" fieldname="idtalonario" onclick="EditTalonario"/>
+        </column>
+        <column name="motivo" order="130">
+            <widget type="select" fieldname="motivo" translate="true">
+                <values title="motivo-no-vendida">no-vendida</values>
+                <values title="motivo-extraviada">extraviada</values>
+                <values title="motivo-robada">robada</values>
+                <values title="motivo-otro">otro</values>
+            </widget>
+        </column>
+        <column name="fecha" display="center" order="140">
+            <widget type="date" fieldname="fecha"/>
+        </column>
+        <column name="observations" order="150">
+            <widget type="textarea" fieldname="observaciones"/>
+        </column>
+        <column name="user" display="center" order="160">
+            <widget type="text" fieldname="nick"/>
+        </column>
+    </columns>
+    <rows>
+        <row type="status">
+            <option color="warning" fieldname="motivo">extraviada</option>
+            <option color="danger" fieldname="motivo">robada</option>
+        </row>
+    </rows>
+</view>

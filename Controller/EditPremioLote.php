@@ -5,6 +5,7 @@ namespace FacturaScripts\Plugins\GestionLoteria\Controller;
 use FacturaScripts\Core\Base\Controller;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Where;
+use FacturaScripts\Plugins\GestionLoteria\Model\ParticipacionAnulada;
 use FacturaScripts\Plugins\GestionLoteria\Model\PremioLote;
 use FacturaScripts\Plugins\GestionLoteria\Model\PremioParticipacion;
 use FacturaScripts\Plugins\GestionLoteria\Model\Sorteo;
@@ -323,6 +324,20 @@ class EditPremioLote extends Controller
                     '%numero%' => $numero,
                     '%batch%' => $pagada[0]->idpremiolote,
                     '%date%' => $pagada[0]->fecha_pago,
+                ]);
+                $rejected[] = $token;
+                continue;
+            }
+
+            $anulada = ParticipacionAnulada::all([
+                Where::eq('idsorteo', $sorteo->idsorteo),
+                Where::eq('numero', $numero),
+            ], [], 0, 1);
+            if (!empty($anulada)) {
+                Tools::log()->warning('papeleta-anulada', [
+                    '%numero%' => $numero,
+                    '%motivo%' => Tools::trans('motivo-' . $anulada[0]->motivo),
+                    '%date%' => $anulada[0]->fecha,
                 ]);
                 $rejected[] = $token;
                 continue;
