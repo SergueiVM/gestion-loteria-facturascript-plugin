@@ -18,6 +18,7 @@ class Talonario extends ModelClass
     public $idcontacto;
     public $vendidas;
     public $no_vendidas;
+    public $omitir_pago_donativo_no_vendidas;
     public $total_participaciones;
     public $precio_talonario;
     public $pagado;
@@ -30,6 +31,7 @@ class Talonario extends ModelClass
         $this->nro_fin = 0;
         $this->vendidas = 0;
         $this->no_vendidas = 0;
+        $this->omitir_pago_donativo_no_vendidas = false;
         $this->total_participaciones = 0;
         $this->precio_talonario = 0.00;
         $this->pagado = false;
@@ -76,7 +78,6 @@ class Talonario extends ModelClass
     protected function ensureDefaults(): void
     {
         $total = $this->totalParticipaciones();
-        $normalizedNewRecord = false;
 
         $hasVendidas = isset($this->vendidas) && $this->vendidas !== null;
         $hasNoVendidas = isset($this->no_vendidas) && $this->no_vendidas !== null;
@@ -112,9 +113,14 @@ class Talonario extends ModelClass
 
         $vendidas = (int)($this->vendidas ?? 0);
         $no_vendidas = (int)($this->no_vendidas ?? 0);
+        $omitDonationUnsold = !empty($this->omitir_pago_donativo_no_vendidas);
 
         $precio_part = (float)($sorteo->precio_participacion ?? 0.0);
         $importe_don = (float)($sorteo->importe_donativo ?? 0.0);
+
+        if ($omitDonationUnsold) {
+            return (float)($precio_part * $vendidas);
+        }
 
         return (float)($precio_part * $vendidas + $importe_don * $no_vendidas);
     }
@@ -154,6 +160,7 @@ class Talonario extends ModelClass
     {
         $this->nro_inicio = (int)($this->nro_inicio ?? 0);
         $this->nro_fin = (int)($this->nro_fin ?? 0);
+        $normalizedNewRecord = false;
         // Apply defaults for vendidas/no_vendidas before validation
         $this->ensureDefaults();
 
@@ -196,6 +203,8 @@ class Talonario extends ModelClass
         // Normalize pagado to boolean
         $this->pagado = isset($this->pagado) ? (bool)$this->pagado : false;
         $this->matriz_entregada = isset($this->matriz_entregada) ? (bool)$this->matriz_entregada : false;
+        $this->omitir_pago_donativo_no_vendidas = isset($this->omitir_pago_donativo_no_vendidas)
+            ? (bool)$this->omitir_pago_donativo_no_vendidas : false;
 
         return parent::test();
     }
@@ -233,6 +242,9 @@ class Talonario extends ModelClass
         parent::__set('pagado', $this->pagado);
         $this->matriz_entregada = isset($this->matriz_entregada) ? (bool)$this->matriz_entregada : false;
         parent::__set('matriz_entregada', $this->matriz_entregada);
+        $this->omitir_pago_donativo_no_vendidas = isset($this->omitir_pago_donativo_no_vendidas)
+            ? (bool)$this->omitir_pago_donativo_no_vendidas : false;
+        parent::__set('omitir_pago_donativo_no_vendidas', $this->omitir_pago_donativo_no_vendidas);
 
         // If pagado is being set now, validate that we can create the asiento
         $prevPagado = $this->getOriginal('pagado') ? true : false;

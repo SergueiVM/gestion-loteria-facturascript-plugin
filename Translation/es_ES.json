@@ -39,6 +39,7 @@
     "talonario-asiento-save-error": "Error al guardar el asiento del talonario",
     "venta-loteria": "Cuenta venta de lotería",
     "donativo-loteria": "Cuenta donativo de lotería",
+    "omitir-pago-donativo-no-vendidas": "Omitir el pago de donativo participaciones no vendidas",
     "forma-pago": "Forma de pago",
     "precio-participacion": "Precio participación",
     "precio_participacion": "Precio participación",
