@@ -26,9 +26,9 @@ class ListTalonario extends ListController
                 'CAST(talonarios.nro_inicio AS CHAR(50))',
                 'CAST(talonarios.nro_fin AS CHAR(50))',
             ])
-            ->addOrderBy(['idtalonario'], 'number', 1)
-            // order option uses join model field 'contacto_descripcion'
-            ->addOrderBy(['contacto_descripcion'], 'contact');
+            ->addOrderBy(['idtalonario'], 'number')
+            ->addOrderBy(['contacto_descripcion'], 'contact')
+            ->addOrderBy(['nro_inicio'], 'nro_inicio', 1);
 
         $i18n = Tools::lang();
         $this->listView('ListTalonario')

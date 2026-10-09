@@ -20,9 +20,7 @@
         </column>
 
         <column name="contacto" order="140">
-            <widget type="select" fieldname="idcontacto" onclick="EditContacto">
-                <values source="contactos" fieldcode="idcontacto" fieldtitle="descripcion" />
-            </widget>
+            <widget type="text" fieldname="contacto_descripcion" fieldclick="idcontacto" onclick="EditContacto" />
         </column>
 
         <column name="vendidas" display="right" order="150">

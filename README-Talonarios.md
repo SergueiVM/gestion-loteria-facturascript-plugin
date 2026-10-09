@@ -12,3 +12,8 @@ Reglas:
 - `precio_talonario` = `sorteo.precio_participacion * vendidas + sorteo.importe_donativo * no_vendidas`.
 
 UI: mostrar "participaciones" en lugar de "papeletas".
+
+Ordenación en ListTalonario:
+- Número inicio y Contacto permiten ordenar ascendente y descendente desde el desplegable o pulsando el título de la columna.
+- Contacto se ordena por su descripción, no por su identificador, y mantiene el enlace a su ficha.
+- La ordenación predeterminada es por Número inicio ascendente.
