@@ -29,6 +29,23 @@ document.addEventListener('DOMContentLoaded', function () {
     if (jugadoEl) jugadoEl.addEventListener('input', updatePrecio);
     if (donativoEl) donativoEl.addEventListener('input', updatePrecio);
 
+    function updatePremio() {
+        var premiadoEl = document.querySelector('input[type="checkbox"][name="premiado"]');
+        var premioEl = document.querySelector('[name="importe_premio"]');
+        if (!premiadoEl || !premioEl) return;
+        premioEl.required = premiadoEl.checked;
+        premioEl.readOnly = !premiadoEl.checked;
+        if (premiadoEl.checked) {
+            premioEl.min = '0.01';
+        } else {
+            premioEl.removeAttribute('min');
+        }
+    }
+
+    var premiadoEl = document.querySelector('input[type="checkbox"][name="premiado"]');
+    if (premiadoEl) premiadoEl.addEventListener('change', updatePremio);
+
     // initialize
     updatePrecio();
+    updatePremio();
 });

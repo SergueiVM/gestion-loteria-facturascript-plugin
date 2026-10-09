@@ -1,0 +1,107 @@
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% block body %}
+    {% set sorteo = fsc.sorteo %}
+
+    <div class="bg-light pt-4 pb-5">
+        <div class="container pb-4">
+            <h1 class="h4 mb-3">
+                <i class="fa-solid fa-trophy fa-fw"></i> {{ trans('pagos-premios') }}
+            </h1>
+            <form method="get" action="ReportPagosPremios" class="row g-2 align-items-end">
+                <div class="col-md-5">
+                    <label for="idsorteo" class="form-label">{{ trans('sorteo-premiado') }}</label>
+                    <select id="idsorteo" name="idsorteo" class="form-select" onchange="this.form.submit()">
+                        {% for item in fsc.sorteos %}
+                            <option value="{{ item.idsorteo }}" {{ sorteo and sorteo.idsorteo == item.idsorteo ? 'selected' : '' }}>
+                                {{ item.descripcion }}{% if not item.activo %} ({{ trans('inactive') }}){% endif %}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="desde" class="form-label">{{ trans('from-date') }}</label>
+                    <input type="date" id="desde" name="desde" value="{{ fsc.desde }}" class="form-control"/>
+                </div>
+                <div class="col-md-2">
+                    <label for="hasta" class="form-label">{{ trans("until-date", {"%date%": ""}) }}</label>
+                    <input type="date" id="hasta" name="hasta" value="{{ fsc.hasta }}" class="form-control"/>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-filter me-1"></i>{{ trans('filter') }}
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="window.print()">
+                        <i class="fa-solid fa-print"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: -3rem;">
+        {% if sorteo is null %}
+            <div class="alert alert-warning">{{ trans('no-sorteos-premiados-informe') }}</div>
+        {% else %}
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100"><div class="card-body">
+                        <div class="text-muted small">{{ trans('importe-premio') }}</div>
+                        <div class="h5 mb-0">{{ money(sorteo.importe_premio) }}</div>
+                    </div></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100"><div class="card-body">
+                        <div class="text-muted small">{{ trans('total-papeletas') }}</div>
+                        <div class="h5 mb-0">{{ fsc.totalPapeletas }}</div>
+                    </div></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100"><div class="card-body">
+                        <div class="text-muted small">{{ trans("importe-pagado") }}</div>
+                        <div class="h5 mb-0">{{ money(fsc.totalImporte) }}</div>
+                    </div></div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-5">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                        <tr>
+                            <th>{{ trans('date') }}</th>
+                            <th class="text-end">{{ trans('papeletas') }}</th>
+                            <th class="text-end">{{ trans('importe-pagado') }}</th>
+                            <th class="text-end">{{ trans('papeletas-acumuladas') }}</th>
+                            <th class="text-end">{{ trans('importe-acumulado') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in fsc.rows %}
+                            <tr>
+                                <td>{{ row.fecha|date('d-m-Y') }}</td>
+                                <td class="text-end">{{ row.papeletas }}</td>
+                                <td class="text-end">{{ money(row.importe) }}</td>
+                                <td class="text-end text-muted">{{ row.acumulado_papeletas }}</td>
+                                <td class="text-end text-muted">{{ money(row.acumulado_importe) }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">{{ trans('no-data') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot class="table-light fw-bold">
+                        <tr>
+                            <td>{{ trans('total') }}</td>
+                            <td class="text-end">{{ fsc.totalPapeletas }}</td>
+                            <td class="text-end">{{ money(fsc.totalImporte) }}</td>
+                            <td colspan="2"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

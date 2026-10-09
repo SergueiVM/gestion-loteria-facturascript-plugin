@@ -19,17 +19,23 @@
 
         <group name="importes" numcolumns="12">
             <!-- Second line: importes -->
-            <column name="importe-jugado" order="200" numcolumns="3">
+            <column name="importe-jugado" order="200" numcolumns="4">
                 <widget type="money" fieldname="importe_jugado"/>
             </column>
-            <column name="importe-donativo" order="210" numcolumns="3">
+            <column name="importe-donativo" order="210" numcolumns="4">
                 <widget type="money" fieldname="importe_donativo"/>
             </column>
-            <column name="importe-premio" order="220" numcolumns="3">
-                <widget type="money" fieldname="importe_premio"/>
-            </column>
-            <column name="precio-participacion" display="right" order="230" numcolumns="3">
+            <column name="precio-participacion" display="right" order="220" numcolumns="4">
                 <widget type="money" fieldname="precio_participacion" readonly="true"/>
+            </column>
+        </group>
+
+        <group name="premio" title="premio" numcolumns="12" valign="bottom">
+            <column name="premiado" display="center" order="250" numcolumns="3">
+                <widget type="checkbox" fieldname="premiado"/>
+            </column>
+            <column name="importe-premio" description="importe-premio-help" order="260" numcolumns="4">
+                <widget type="money" fieldname="importe_premio"/>
             </column>
         </group>
         <group name="contabilidad" title="accounting" numcolumns="12">

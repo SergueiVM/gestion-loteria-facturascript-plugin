@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="batch" order="100">
+            <widget type="text" fieldname="idpremiolote" onclick="EditPremioLote"/>
+        </column>
+        <column name="sorteo" order="110">
+            <widget type="select" fieldname="idsorteo" onclick="EditSorteo">
+                <values source="sorteos" fieldcode="idsorteo" fieldtitle="descripcion"/>
+            </widget>
+        </column>
+        <column name="fecha" display="right" order="120">
+            <widget type="datetime" fieldname="created_at"/>
+        </column>
+        <column name="papeletas" display="right" order="130">
+            <widget type="number" fieldname="cantidad_participaciones" decimal="0"/>
+        </column>
+        <column name="importe-premio-total" display="right" order="140">
+            <widget type="money" fieldname="importe_total"/>
+        </column>
+    </columns>
+</view>

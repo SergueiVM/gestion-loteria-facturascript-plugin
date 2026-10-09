@@ -33,6 +33,8 @@ class ListSorteo extends ListController
                 ['label' => $i18n->trans('inactive'), 'where' => [new DataBaseWhere('activo', false)]],
             ]);
 
+        $this->listView('ListSorteo')->addFilterCheckbox('premiado', 'premiado', 'premiado');
+
         // Default the select to 'active' so the list shows active sorteos by default
         if (isset($this->listView('ListSorteo')->filters['activo'])) {
             $this->listView('ListSorteo')->filters['activo']->setValue(2);

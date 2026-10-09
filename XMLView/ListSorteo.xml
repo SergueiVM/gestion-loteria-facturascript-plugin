@@ -22,6 +22,9 @@
         <column name="importe-donativo" display="right" order="160">
             <widget type="money" fieldname="importe_donativo" totals="false"/>
         </column>
+        <column name="premiado" display="center" order="165">
+            <widget type="checkbox" fieldname="premiado"/>
+        </column>
         <column name="importe-premio" display="right" order="170">
             <widget type="money" fieldname="importe_premio" totals="false"/>
         </column>

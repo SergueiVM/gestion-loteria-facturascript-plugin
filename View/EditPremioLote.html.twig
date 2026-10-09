@@ -1,0 +1,176 @@
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% block body %}
+    {% set lote = fsc.lote %}
+    {% set sorteo = fsc.sorteo %}
+
+    <div class="bg-light pt-4 pb-5">
+        <div class="container pb-4">
+            <div class="row g-3 align-items-center">
+                <div class="col">
+                    <a href="ListPremioLote" class="btn btn-sm btn-outline-secondary mb-2">
+                        <i class="fa-solid fa-arrow-left me-1"></i>{{ trans('premios') }}
+                    </a>
+                    <h1 class="h4 mb-0">
+                        <i class="fa-solid fa-trophy fa-fw"></i>
+                        {% if lote %}{{ trans('batch') }} #{{ lote.idpremiolote }}{% else %}{{ trans('new-payment-batch') }}{% endif %}
+                    </h1>
+                    {% if lote %}
+                        <p class="text-muted mb-0 mt-2">
+                            <a href="{{ sorteo.url() }}">{{ sorteo.descripcion }}</a>
+                            · {{ trans('fecha') }}: {{ lote.created_at }}
+                            · {{ trans('importe-premio') }}: {{ sorteo.importe_premio|number_format(2, ',', '.') }} €
+                            {% if not sorteo.activo %}<span class="badge bg-secondary ms-1">{{ trans('inactive') }}</span>{% endif %}
+                        </p>
+                    {% endif %}
+                </div>
+                {% if lote and fsc.permissions.allowDelete %}
+                    <div class="col-auto">
+                        <form action="{{ fsc.url() }}" method="post" onsubmit="return confirm('{{ trans('delete-batch-confirm')|e('js') }}');">
+                            {{ formToken() }}
+                            <input type="hidden" name="action" value="delete-lote"/>
+                            <button type="submit" class="btn btn-outline-danger">
+                                <i class="fa-solid fa-trash-can me-1"></i>{{ trans('delete-batch') }}
+                            </button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: -40px;">
+        <div class="row g-4">
+            <div class="col-12 col-lg-5">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        {% if lote is null and fsc.sorteos is empty %}
+                            <p class="mb-3">{{ trans('no-sorteos-premiados') }}</p>
+                            <a href="ListSorteo" class="btn btn-outline-primary">
+                                <i class="fa-solid fa-ticket me-2"></i>{{ trans('sorteos') }}
+                            </a>
+                        {% else %}
+                            <form action="{{ fsc.url() }}" method="post">
+                                {{ formToken() }}
+                                <input type="hidden" name="action" value="add-papeletas"/>
+
+                                {% if lote is null %}
+                                    <div class="mb-3">
+                                        <label for="idsorteo" class="form-label">{{ trans('sorteo-premiado') }}</label>
+                                        <select id="idsorteo" name="idsorteo" class="form-select" required>
+                                            <option value="">------</option>
+                                            {% for item in fsc.sorteos %}
+                                                <option value="{{ item.idsorteo }}" data-importe="{{ item.importe_premio }}"
+                                                        {{ fsc.selectedSorteoId == item.idsorteo ? 'selected' : '' }}>
+                                                    {{ item.descripcion }} · {{ item.importe_premio|number_format(2, ',', '.') }} €
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                {% endif %}
+
+                                <div class="mb-3">
+                                    <label for="fecha_pago" class="form-label">{{ trans('fecha-pago') }}</label>
+                                    <input type="date" id="fecha_pago" name="fecha_pago" class="form-control"
+                                           value="{{ fsc.fechaPago }}" max="{{ 'now'|date('Y-m-d') }}" required/>
+                                </div>
+
+                                <div class="mb-2">
+                                    <label for="papeletas" class="form-label">{{ trans('papeletas') }}</label>
+                                    <textarea id="papeletas" name="papeletas" class="form-control font-monospace" rows="10"
+                                              placeholder="{{ trans('premios-input-placeholder') }}" required>{{ fsc.papeletasInput }}</textarea>
+                                    <div class="form-text">{{ trans('premios-input-help') }}</div>
+                                </div>
+
+                                <div class="alert alert-secondary py-2 d-flex justify-content-between mb-3">
+                                    <span>{{ trans('papeletas') }}: <strong id="papeletasCount">0</strong></span>
+                                    <span>{{ trans('estimated-amount') }}: <strong id="papeletasAmount">0,00</strong> €</span>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 btn-spin-action">
+                                    <i class="fa-solid fa-check me-2"></i>{{ trans('register-papeletas') }}
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-7">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <i class="fa-solid fa-ticket me-2"></i>{{ trans('papeletas-registradas') }}
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover align-middle mb-0">
+                            <thead>
+                            <tr>
+                                <th>{{ trans('participation-number') }}</th>
+                                <th>{{ trans('fecha-pago') }}</th>
+                                <th class="text-end">{{ trans('importe-premio') }}</th>
+                                <th class="text-end" style="width: 1%;"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for linea in fsc.lineas %}
+                                <tr>
+                                    <td class="fw-semibold">{{ linea.numero }}</td>
+                                    <td>{{ linea.fecha_pago }}</td>
+                                    <td class="text-end">{{ linea.importe|number_format(2, ',', '.') }} €</td>
+                                    <td class="text-end">
+                                        {% if fsc.permissions.allowDelete %}
+                                            <form action="{{ fsc.url() }}" method="post" class="d-inline"
+                                                  onsubmit="return confirm('{{ trans('delete-papeleta-confirm', {'%numero%': linea.numero})|e('js') }}');">
+                                                {{ formToken() }}
+                                                <input type="hidden" name="action" value="delete-papeleta"/>
+                                                <input type="hidden" name="idpremioparticipacion" value="{{ linea.idpremioparticipacion }}"/>
+                                                <button type="submit" class="btn btn-sm btn-link text-danger py-0" title="{{ trans('delete') }}">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-3">{{ trans('no-data') }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr class="table-light fw-semibold">
+                                <td>{{ trans('total-papeletas') }}: {{ lote ? lote.cantidad_participaciones : 0 }}</td>
+                                <td></td>
+                                <td class="text-end">{{ trans('total-to-pay') }}: {{ (lote ? lote.importe_total : 0)|number_format(2, ',', '.') }} €</td>
+                                <td></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const textarea = document.getElementById('papeletas');
+            if (!textarea) return;
+            const select = document.getElementById('idsorteo');
+            const countEl = document.getElementById('papeletasCount');
+            const amountEl = document.getElementById('papeletasAmount');
+            const fixedImporte = {{ sorteo ? sorteo.importe_premio|default(0) : 0 }};
+
+            function update() {
+                const importe = select ? parseFloat(select.selectedOptions[0]?.dataset.importe || 0) : fixedImporte;
+                const numbers = new Set(textarea.value.split(/[\s,;]+/).filter(v => /^\d+$/.test(v)).map(Number));
+                countEl.textContent = numbers.size;
+                amountEl.textContent = (numbers.size * importe).toLocaleString('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            }
+
+            textarea.addEventListener('input', update);
+            if (select) select.addEventListener('change', update);
+            update();
+        })();
+    </script>
+{% endblock %}

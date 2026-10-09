@@ -38,6 +38,12 @@ final class Init extends InitClass
         new Model\PremioParticipacion();
         $this->updateTableData('premio_participaciones');
 
+        // Sorteos con lotes de premio ya registrados se marcan como premiados
+        $db = new DataBase();
+        $db->connect();
+        $db->exec('UPDATE sorteos SET premiado = ' . $db->var2str(true)
+            . ' WHERE idsorteo IN (SELECT DISTINCT idsorteo FROM premio_lotes)');
+
     //     // If an old 'codigo' column still exists in DB, remove it to avoid NOT NULL errors
     //     try {
     //         $db = new DataBase();

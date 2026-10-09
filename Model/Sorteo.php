@@ -17,6 +17,7 @@ class Sorteo extends ModelClass
     public $activo;
     public $importe_jugado;
     public $importe_donativo;
+    public $premiado;
     public $importe_premio;
     public $precio_participacion;
     public $codsubcuentaven_loteria;
@@ -31,6 +32,7 @@ class Sorteo extends ModelClass
         $this->activo = true;
         $this->importe_jugado = 0.00;
         $this->importe_donativo = 0.00;
+        $this->premiado = false;
         $this->importe_premio = null;
         $this->codsubcuentaven_loteria = null;
         $this->codsubcuentadon_loteria = null;
@@ -110,6 +112,16 @@ class Sorteo extends ModelClass
         return $saved;
     }
 
+    public function hasPaidPrizes(): bool
+    {
+        if (empty($this->idsorteo) || false === self::db()->tableExists('premio_lotes')) {
+            return false;
+        }
+
+        $sql = 'SELECT 1 FROM premio_lotes WHERE idsorteo = ' . (int)$this->idsorteo . ' LIMIT 1';
+        return !empty(self::db()->select($sql));
+    }
+
     public function test(): bool
     {
         // sanitize
@@ -133,6 +145,17 @@ class Sorteo extends ModelClass
 
         if (isset($this->importe_donativo) && $this->importe_donativo < 0) {
             Tools::log()->error('invalid-importe_donativo');
+            return false;
+        }
+
+        $this->premiado = (bool)$this->premiado;
+        if ($this->premiado && (float)($this->importe_premio ?? 0) <= 0) {
+            Tools::log()->error('premio-amount-required');
+            return false;
+        }
+
+        if (false === $this->premiado && $this->hasPaidPrizes()) {
+            Tools::log()->error('sorteo-has-paid-prizes');
             return false;
         }
 
