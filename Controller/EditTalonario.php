@@ -26,6 +26,6 @@ class EditTalonario extends EditController
     protected function createViews()
     {
         parent::createViews();
-        // Assets for talonario UI can be added here later
+        AssetManager::addJs(FS_ROUTE . '/Plugins/GestionLoteria/Assets/Js/edit-talonario.js?v=' . Tools::date());
     }
 }
